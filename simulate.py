@@ -1,3 +1,5 @@
 import pybullet as p
 
-pass
+physicsCLient = p.connect(p.GUI)
+
+p.disconnect()
