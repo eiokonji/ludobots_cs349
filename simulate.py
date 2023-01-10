@@ -7,6 +7,7 @@ p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
 p.setGravity(0,0,-9.8)
 planeId = p.loadURDF("plane.urdf")
+robotId = p.loadURDF("body.urdf")
 
 # opening the window using for loop 1000 times
 iterations = 1000
