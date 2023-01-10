@@ -10,7 +10,7 @@ planeId = p.loadURDF("plane.urdf")
 robotId = p.loadURDF("body.urdf")
 
 # opening the window using for loop 1000 times
-iterations = 1000
+iterations = 3000
 p.loadSDF("world.sdf")
 for i in range(iterations):
     p.stepSimulation()
