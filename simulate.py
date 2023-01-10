@@ -10,7 +10,7 @@ planeId = p.loadURDF("plane.urdf")
 
 # opening the window using for loop 1000 times
 iterations = 1000
-p.loadSDF("box.sdf")
+p.loadSDF("boxes.sdf")
 for i in range(iterations):
     p.stepSimulation()
     time.sleep(1/60)
