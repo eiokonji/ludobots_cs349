@@ -11,7 +11,6 @@ x = 0               # red
 y = 0               # green
 z = 0.5             # blue
 
-
 def Create_World():
     # tells pyrosim name of object file
     pyrosim.Start_SDF("world.sdf")
@@ -24,6 +23,8 @@ def Create_Robot():
     pyrosim.Start_URDF("body.urdf")
 
     pyrosim.Send_Cube(name="Torso", pos=[x,y,z], size=[length, width, height])
+    pyrosim.Send_Joint(name="Torso_Leg", parent="Torso", child="Leg", type="revolute", position=[x/2, y, z + x/2])
+    pyrosim.Send_Cube(name="Leg", pos=[x + length, y, z + height], size=[length, width, height])
 
     pyrosim.End()
 
