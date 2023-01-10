@@ -14,6 +14,7 @@ x = 0               # red
 y = 0               # green
 z = 0.5             # blue
 
+# nested while loops making 5 by 5 by 10 blocks (x by y by z)
 while x < 5:
     y = 0
     while y < 5:
@@ -24,6 +25,7 @@ while x < 5:
         while z < 11:
             pyrosim.Send_Cube(name="Box", pos=[x,y,z], size=[length, width, height])
             z = z + 0.5 + height
+            #  reduce size of nect block by 10%
             length = 0.9 * length
             width = 0.9 * width
             height = 0.9 * height
