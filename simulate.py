@@ -2,6 +2,7 @@ import pybullet as p
 import time
 
 physicsCLient = p.connect(p.GUI)
+p.setGravity(0,0,-9.8)
 
 # opening the window using for loop 1000 times
 iterations = 1000
