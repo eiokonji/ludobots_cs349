@@ -10,17 +10,19 @@ p.setGravity(0,0,-9.8)
 planeId = p.loadURDF("plane.urdf")
 robotId = p.loadURDF("body.urdf")
 
-# setup for sensors
+# set up pyrosim
 pyrosim.Prepare_To_Simulate(robotId)
 
 # opening the window using for loop 1000 times
-iterations = 3000
+iterations = 6000
 p.loadSDF("world.sdf")
 for i in range(iterations):
     p.stepSimulation()
-    time.sleep(1/60)
+    
+    # add, print sensors
+    backLegTouch = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
+    print(backLegTouch)
 
-# adding sensors
-backLegTouch = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
+    time.sleep(1/60)
 
 p.disconnect()
