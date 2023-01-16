@@ -1,3 +1,4 @@
+import constants as c
 import numpy
 import random
 import pyrosim.pyrosim as pyrosim
@@ -15,35 +16,26 @@ robotId = p.loadURDF("body.urdf")
 # set up pyrosim
 pyrosim.Prepare_To_Simulate(robotId)
 
-# iterations for for-loop
-iterations = 1000
-# Back Leg
-ampBackLeg = numpy.pi/8
-freqBackLeg = 20
-phaseOffsetBackLeg = 0
-targetAnglesBackLeg = numpy.zeros(iterations)
-# Front Leg
-ampFrontLeg = numpy.pi/4
-freqFrontLeg = 20
-phaseOffsetFrontLeg = 0
-targetAnglesFrontLeg = numpy.zeros(iterations)
+# storing motor command values
+targetAnglesBackLeg = numpy.zeros(c.iterations)
+targetAnglesFrontLeg = numpy.zeros(c.iterations)
 
 # storing sensor values, numpy
-backLegSensorValues = numpy.zeros(iterations)
-frontLegSensorValues = numpy.zeros(iterations)
+backLegSensorValues = numpy.zeros(c.iterations)
+frontLegSensorValues = numpy.zeros(c.iterations)
 
 # generate vector of sinusoidally varying values
-firstVector = numpy.linspace(0, numpy.pi * 2, iterations)
+firstVector = numpy.linspace(0, numpy.pi * 2, c.iterations)
 # Back Leg
 for ind, each in enumerate(firstVector):
-    targetAnglesBackLeg[ind] = ampBackLeg * numpy.sin(freqBackLeg * each + phaseOffsetBackLeg)
+    targetAnglesBackLeg[ind] = c.ampBackLeg * numpy.sin(c.freqBackLeg * each + c.phaseOffsetBackLeg)
 # Front Leg
 for ind, each in enumerate(firstVector):
-    targetAnglesFrontLeg[ind] = ampFrontLeg * numpy.sin(freqFrontLeg * each + phaseOffsetFrontLeg)
+    targetAnglesFrontLeg[ind] = c.ampFrontLeg * numpy.sin(c.freqFrontLeg * each + c.phaseOffsetFrontLeg)
 
 # opening the window using for loop 1000 times
 p.loadSDF("world.sdf")
-for i in range(iterations):
+for i in range(c.iterations):
     p.stepSimulation()
 
     # add sensors
@@ -57,13 +49,13 @@ for i in range(iterations):
         jointName=b'Torso_BackLeg',
         controlMode=p.POSITION_CONTROL,
         targetPosition=targetAnglesBackLeg[i],
-        maxForce=100)
+        maxForce=c.forceBackLeg)
     pyrosim.Set_Motor_For_Joint(
         bodyIndex=robotId,
         jointName=b'Torso_FrontLeg',
         controlMode=p.POSITION_CONTROL,
         targetPosition=targetAnglesFrontLeg[i],
-        maxForce=100)
+        maxForce=c.forceFrontLeg)
 
     time.sleep(1/240)
 
