@@ -1,3 +1,7 @@
+from motor import MOTOR
+from sensor import SENSOR
+
 class ROBOT:
     def __init__(self) -> None:
-        pass
+        self.motors = {}
+        self.sensors = {}
