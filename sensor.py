@@ -10,3 +10,7 @@ class SENSOR:
     def Get_Value(self, it):
         # store the sensor value of current link in timestep-indexed list
         self.values[it] = pyrosim.Get_Touch_Sensor_Value_For_Link(self.linkName)
+
+    def Save_Value(self):
+        dst = 'data/' + self.linkName + 'Sensor'
+        numpy.save(dst, self.values)

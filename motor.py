@@ -31,3 +31,7 @@ class MOTOR:
             controlMode= p.POSITION_CONTROL,
             targetPosition= self.motorValues[it],
             maxForce=c.forceBackLeg)
+
+    def Save_Value(self):
+        dst = 'data/' + self.jointName + 'Motor'
+        numpy.save(dst, self.motorValues)
