@@ -22,39 +22,39 @@ backLegSensorValues = numpy.zeros(iterations)
 frontLegSensorValues = numpy.zeros(iterations)
 
 # generate vector of sinusoidally varying values
-targetAngles = numpy.linspace(0, numpy.pi * 2, iterations)
+targetAngles = -numpy.pi/4 * numpy.sin(numpy.linspace(0, numpy.pi * 2, iterations))
 
 # opening the window using for loop 1000 times
-p.loadSDF("world.sdf")
-for i in range(iterations):
-    p.stepSimulation()
+# p.loadSDF("world.sdf")
+# for i in range(iterations):
+#     p.stepSimulation()
 
-    # add sensors
-    backLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
-    frontLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link(
-        "FrontLeg")
+#     # add sensors
+#     backLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
+#     frontLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link(
+#         "FrontLeg")
 
-    # simulating motors
-    pyrosim.Set_Motor_For_Joint(
-        bodyIndex=robotId,
-        jointName=b'Torso_BackLeg',
-        controlMode=p.POSITION_CONTROL,
-        targetPosition=-numpy.pi/8,
-        maxForce=500)
-    pyrosim.Set_Motor_For_Joint(
-        bodyIndex=robotId,
-        jointName=b'Torso_FrontLeg',
-        controlMode=p.POSITION_CONTROL,
-        targetPosition=numpy.pi/8,
-        maxForce=500)
+#     # simulating motors
+#     pyrosim.Set_Motor_For_Joint(
+#         bodyIndex=robotId,
+#         jointName=b'Torso_BackLeg',
+#         controlMode=p.POSITION_CONTROL,
+#         targetPosition=-numpy.pi/8,
+#         maxForce=500)
+#     pyrosim.Set_Motor_For_Joint(
+#         bodyIndex=robotId,
+#         jointName=b'Torso_FrontLeg',
+#         controlMode=p.POSITION_CONTROL,
+#         targetPosition=numpy.pi/8,
+#         maxForce=500)
 
-    time.sleep(1/60)
+#     time.sleep(1/60)
 
-# saving sensor data, sine values to a file
-numpy.save('data/backlegsensor', backLegSensorValues)
-numpy.save('data/frontlegsensor', frontLegSensorValues)
+# # saving sensor data, sine values to a file
+# numpy.save('data/backlegsensor', backLegSensorValues)
+# numpy.save('data/frontlegsensor', frontLegSensorValues)
 numpy.save('data/targetangles', targetAngles)
 
-print("back", backLegSensorValues)
-print("front", frontLegSensorValues)
+# print("back", backLegSensorValues)
+# print("front", frontLegSensorValues)
 p.disconnect()

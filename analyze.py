@@ -9,7 +9,7 @@ targetAngles = numpy.load("./data/targetangles.npy")
 # visualize data, matplotlib
 # mp.plot(backLegSensorValues, label="Back Leg", linewidth=1.2)
 # mp.plot(frontLegSensorValues, label="Front Leg", lw= 0.8)
-mp.plot(numpy.sin(targetAngles), label="Target Angles")
+mp.plot(targetAngles, label="Target Angles")
 
 mp.legend(loc='best')
 mp.show()
