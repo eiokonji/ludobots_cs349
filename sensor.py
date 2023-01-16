@@ -8,6 +8,5 @@ class SENSOR:
         self.values = numpy.zeros(c.iterations)
     
     def Get_Value(self, it):
+        # store the sensor value of current link in timestep-indexed list
         self.values[it] = pyrosim.Get_Touch_Sensor_Value_For_Link(self.linkName)
-        # if it == 999:
-        #     print(self.values)

@@ -26,27 +26,18 @@ class SIMULATION:
         # setup pyrosim
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.robot.Prepare_To_Sense()
+        self.robot.Prepare_To_Act()
 
     def Run(self):
         # keep the world open for c.iterations long
         for it in range(c.iterations):
             p.stepSimulation()
 
+            # allow the robot to sense, pass down current timestep
             self.robot.Sense(it)
 
-            # # simulating motors
-            # pyrosim.Set_Motor_For_Joint(
-            #     bodyIndex=robotId,
-            #     jointName=b'Torso_BackLeg',
-            #     controlMode=p.POSITION_CONTROL,
-            #     targetPosition=targetAnglesBackLeg[i],
-            #     maxForce=c.forceBackLeg)
-            # pyrosim.Set_Motor_For_Joint(
-            #     bodyIndex=robotId,
-            #     jointName=b'Torso_FrontLeg',
-            #     controlMode=p.POSITION_CONTROL,
-            #     targetPosition=targetAnglesFrontLeg[i],
-            #     maxForce=c.forceFrontLeg)
+            # allow the robot to move, pass down current timestep
+            self.robot.Act(it, self.robotId)
 
             time.sleep(1/60)
 
