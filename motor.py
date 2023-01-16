@@ -3,6 +3,7 @@ import numpy
 import pybullet as p
 import pyrosim.pyrosim as pyrosim
 
+
 class MOTOR:
     def __init__(self, jointName) -> None:
         self.jointName = jointName
@@ -16,6 +17,10 @@ class MOTOR:
         self.offset = c.phaseOffsetBackLeg
         self.iterations = c.iterations
 
+        if self.jointName == b'Torso_BackLeg':
+            self.frequency = c.freqBackLeg/2
+        
+
         # generate vector of sinusoidally varying values
         firstVector = numpy.linspace(0, numpy.pi * 2, self.iterations)
         # Back Leg
@@ -26,10 +31,10 @@ class MOTOR:
     def Set_Value(self, it, robotId):
         # simulating motors
         pyrosim.Set_Motor_For_Joint(
-            bodyIndex= robotId,
-            jointName= self.jointName,
-            controlMode= p.POSITION_CONTROL,
-            targetPosition= self.motorValues[it],
+            bodyIndex=robotId,
+            jointName=self.jointName,
+            controlMode=p.POSITION_CONTROL,
+            targetPosition=self.motorValues[it],
             maxForce=c.forceBackLeg)
 
     def Save_Value(self):
