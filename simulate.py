@@ -12,6 +12,9 @@ import pybullet_data
 import time
 
 simulation = SIMULATION()
+simulation.Run()
+simulation.__del__()
+
 world = WORLD()
 robot = ROBOT()
 

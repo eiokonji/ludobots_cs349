@@ -17,7 +17,7 @@ class SIMULATION:
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
         # load world: the plane, the grey block, gravity
-        # load robot: robot, 
+        # load robot: robot,
         p.setGravity(0, 0, -9.8)
         p.loadSDF("world.sdf")
         self.planeId = p.loadURDF("plane.urdf")
@@ -26,8 +26,13 @@ class SIMULATION:
         # setup pyrosim
         pyrosim.Prepare_To_Simulate(self.robotId)
 
+    def Run(self):
+        # keep the world open for c.iterations long
         for i in range(c.iterations):
             p.stepSimulation()
-            time.sleep(1/240)
+            time.sleep(1/60)
+            print(i)
 
+    def __del__(self):
+        # destructor: disconnect from the simulator
         p.disconnect()
