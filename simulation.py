@@ -25,13 +25,30 @@ class SIMULATION:
 
         # setup pyrosim
         pyrosim.Prepare_To_Simulate(self.robotId)
+        self.robot.Prepare_To_Sense()
 
     def Run(self):
         # keep the world open for c.iterations long
-        for i in range(c.iterations):
+        for it in range(c.iterations):
             p.stepSimulation()
+
+            self.robot.Sense(it)
+
+            # # simulating motors
+            # pyrosim.Set_Motor_For_Joint(
+            #     bodyIndex=robotId,
+            #     jointName=b'Torso_BackLeg',
+            #     controlMode=p.POSITION_CONTROL,
+            #     targetPosition=targetAnglesBackLeg[i],
+            #     maxForce=c.forceBackLeg)
+            # pyrosim.Set_Motor_For_Joint(
+            #     bodyIndex=robotId,
+            #     jointName=b'Torso_FrontLeg',
+            #     controlMode=p.POSITION_CONTROL,
+            #     targetPosition=targetAnglesFrontLeg[i],
+            #     maxForce=c.forceFrontLeg)
+
             time.sleep(1/60)
-            print(i)
 
     def __del__(self):
         # destructor: disconnect from the simulator
