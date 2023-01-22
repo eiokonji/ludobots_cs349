@@ -20,6 +20,7 @@ class ROBOT:
             self.sensors[s].Get_Value(it)
 
     def Think(self):
+        self.nn.Update()
         self.nn.Print()
 
     def Prepare_To_Act(self):
