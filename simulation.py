@@ -36,6 +36,9 @@ class SIMULATION:
             # allow the robot to sense, pass down current timestep
             self.robot.Sense(it)
 
+            # allow the robot to think, does nothing NOW
+            self.robot.Think()
+
             # allow the robot to move, pass down current timestep
             self.robot.Act(it, self.robotId)
 

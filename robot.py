@@ -1,10 +1,11 @@
 from motor import MOTOR
+from pyrosim.neuralNetwork import NEURAL_NETWORK
 import pyrosim.pyrosim as pyrosim
 from sensor import SENSOR
 
 class ROBOT:
     def __init__(self) -> None:
-        pass
+        self.nn = NEURAL_NETWORK("brain.nndf")
 
     def Prepare_To_Sense(self):
         self.sensors = {}
@@ -17,6 +18,9 @@ class ROBOT:
         # loop through dict and run GetValue method on each sensor
         for s in self.sensors:
             self.sensors[s].Get_Value(it)
+
+    def Think(self):
+        self.nn.Print()
 
     def Prepare_To_Act(self):
         self.motors = {}
