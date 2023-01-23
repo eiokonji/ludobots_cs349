@@ -42,7 +42,7 @@ class SIMULATION:
             # allow the robot to move, pass down current timestep
             self.robot.Act(it, self.robotId)
 
-            time.sleep(1/10)
+            time.sleep(1/5)
 
     def __del__(self):
         # destructor: disconnect from the simulator

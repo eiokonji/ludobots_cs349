@@ -8,25 +8,6 @@ class MOTOR:
     def __init__(self, jointName) -> None:
         self.jointName = jointName
         self.motorValues = numpy.zeros(c.iterations)
-        self.Prepare_To_Act()
-
-    def Prepare_To_Act(self):
-        # retrieve constants (all motors have same parameters)
-        self.amplitude = c.ampBackLeg
-        self.frequency = c.freqBackLeg
-        self.offset = c.phaseOffsetBackLeg
-        self.iterations = c.iterations
-
-        if self.jointName == b'Torso_BackLeg':
-            self.frequency = c.freqBackLeg/2
-        
-
-        # generate vector of sinusoidally varying values
-        firstVector = numpy.linspace(0, numpy.pi * 2, self.iterations)
-        # Back Leg
-        for ind, each in enumerate(firstVector):
-            self.motorValues[ind] = self.amplitude * \
-                numpy.sin(self.frequency * each + self.offset)
 
     def Set_Value(self, desiredAngle, robotId):
         # simulating motors
@@ -37,6 +18,3 @@ class MOTOR:
             targetPosition=desiredAngle,
             maxForce=c.forceBackLeg)
 
-    def Save_Value(self):
-        dst = 'data/' + self.jointName + 'Motor'
-        numpy.save(dst, self.motorValues)
