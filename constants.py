@@ -4,12 +4,12 @@ iterations = 1000
 
 # Back Leg constants
 ampBackLeg = -numpy.pi/2
-forceBackLeg = 60
+forceBackLeg = 50
 freqBackLeg = 20
 phaseOffsetBackLeg = 0
 
 # Back Leg constants
 ampFrontLeg = numpy.pi/2
-forceFrontLeg = 60
+forceFrontLeg = 50
 freqFrontLeg = 20
 phaseOffsetFrontLeg = 0
