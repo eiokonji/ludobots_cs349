@@ -23,7 +23,7 @@ class SOLUTION:
         self.Create_Body()
         self.Create_Brain()
         self.Create_World()
-        os.system("python3 simulate.py " + directOrGUI)
+        os.system("start /B python3 simulate.py " + directOrGUI)
 
         # read in the fitness value
         f = open("fitness.txt", "r")
