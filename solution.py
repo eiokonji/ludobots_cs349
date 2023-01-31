@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import pyrosim.pyrosim as pyrosim
+import random as r
 
 # sets the initial position and size of a cube in object file. measured in metres.
 # size parameters
@@ -70,3 +71,8 @@ class SOLUTION:
                 pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumnn+3 , weight = self.weights[currentRow][currentColumnn] )
 
         pyrosim.End()
+
+    def Mutate(self):
+        randomRow = r.randint(0,2)
+        randomColumn = r.randint(0,1)
+        self.weights[randomRow][randomColumn] = r.random() * 2 - 1 
