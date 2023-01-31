@@ -2,6 +2,7 @@ import numpy as np
 import os
 import pyrosim.pyrosim as pyrosim
 import random as r
+import time
 
 # sets the initial position and size of a cube in object file. measured in metres.
 # size parameters
@@ -14,22 +15,36 @@ x = 0               # red
 y = 0               # green
 z = 0.5             # blue
 
+# os.system delete call in this file! - fitness
+
 class SOLUTION:
     def __init__(self, nextAvailableID) -> None:
         self.weights = np.random.rand(3,2)
         self.weights = self.weights * 2 - 1
         self.myID = nextAvailableID
 
-    def Evaluate(self, directOrGUI):
+    def Start_Simulation(self, directOrGUI):
+        # starts the simulation
         self.Create_Body()
         self.Create_Brain()
         self.Create_World()
         os.system("start /B python3 simulate.py " + directOrGUI + " " + str(self.myID))
 
+    def Wait_For_Simulation_To_End(self):
+        # check simulation is finished and fitness file ready to be read OTHERWISE sleep search.py
+        # DONT CHANGE THE TIME SLEEP PERIOD
+        while not os.path.exists("fitness" + str(self.myID) + ".txt"):
+            time.sleep(1/100)
+        
         # read in the fitness value
-        f = open("fitness.txt", "r")
+        f = open("fitness" + str(self.myID) + ".txt", "r")
         self.fitness = f.read()
+        # print(" ")
+        # print(self.myID, ": ", self.fitness)
         f.close()
+
+        # delete fitness file once done reading it
+        os.system("del fitness"+str(self.myID)+".txt")
 
     def Create_World(self):
         # tells pyrosim name of object file

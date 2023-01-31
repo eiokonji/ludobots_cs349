@@ -5,11 +5,13 @@ from pyrosim.neuralNetwork import NEURAL_NETWORK
 import pyrosim.pyrosim as pyrosim
 from sensor import SENSOR
 
+# os.system delete call in this file! - brain
+
 class ROBOT:
     def __init__(self, solutionID) -> None:
         self.nn = NEURAL_NETWORK("brain"+str(solutionID)+".nndf")
         os.system("del brain"+str(solutionID)+".nndf")
-        # self.solutionID = solutionID
+        self.solutionID = solutionID
 
     def Prepare_To_Sense(self):
         self.sensors = {}
@@ -47,11 +49,12 @@ class ROBOT:
         positionOfLinkZero = stateOfLinkZero[0]
         xCoordinateOfLinkZero = positionOfLinkZero[0]
 
-        # write x-coordinate to a new file
-        f = open("fitness.txt", "w")
+        # # write x-coordinate to a new temporary file
+        # f = open("fitness" + str(self.solutionID) + ".txt", "w")
+        f = open("tmp" + str(self.solutionID) + ".txt", "w")
         f.write(str(xCoordinateOfLinkZero))
         f.close()
+        os.system("rename tmp" + str(self.solutionID) + ".txt fitness" + str(self.solutionID) + ".txt")
 
         # print("xcoord: ", xCoordinateOfLinkZero)
         exit()
-        

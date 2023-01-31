@@ -5,6 +5,9 @@ from solution import SOLUTION
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self) -> None:
+        os.system("del brain*.nndf")
+        os.system("del fitness*.txt")
+
         self.nextAvailableID = 0
         self.parents = {}
 
@@ -15,25 +18,40 @@ class PARALLEL_HILL_CLIMBER:
     def Evolve(self):
         # self.parent.Evaluate("GUI")
 
-        # # repeat spawn, mutate, evaluate, select for several generations
-        # for currentGeneration in range(c.numberOfGenerations):
-        #     self.Evolve_For_One_Generation()
+        # # start the simulations in parallel for all parents
+        # for pop in range(c.populationSize):
+        #     # self.parents[pop].Evaluate("GUI")
+        #     self.parents[pop].Start_Simulation("DIRECT")
 
-        for pop in range(c.populationSize):
-            self.parents[pop].Evaluate("GUI")
+        # # retrieve fitness values for each parent
+        # for pop in range(c.populationSize):
+        #     self.parents[pop].Wait_For_Simulation_To_End()
+
+        # repeat spawn, mutate, evaluate, select for several generations
+        for currentGeneration in range(c.numberOfGenerations):
+            self.Evolve_For_One_Generation()
 
     def Evolve_For_One_Generation(self):
+        # spawn, mutate, evaluate, select for one gen
         self.Spawn()
-        self.Mutate()
-        self.child.Evaluate("DIRECT")
-        self.Print()
-        self.Select()
+        # self.Mutate()
+        # self.child.Evaluate("DIRECT")
+        # self.Print()
+        # self.Select()
+        
 
     def Spawn(self):
-        # spawn a copy of parent -> child
-        self.child = copy.deepcopy(self.parent)
-        self.child.Set_ID(self.nextAvailableID)
-        self.nextAvailableID += 1
+        # # spawn a copy of parent -> child
+        # self.child = copy.deepcopy(self.parent)
+        # self.child.Set_ID(self.nextAvailableID)
+        # self.nextAvailableID += 1
+
+        self.children = {}
+
+        for key in self.parents:
+            self.children[key] = copy.deepcopy(self.parents[key])
+            self.children[key].Set_ID(self.nextAvailableID)
+            self.nextAvailableID += 1
 
     def Mutate(self):
         self.child.Mutate()

@@ -50,7 +50,6 @@ class SIMULATION:
             if self.directOrGUI == "GUI":
                 time.sleep(1/2400)
             
-
     def __del__(self):
         # destructor: disconnect from the simulator
         p.disconnect()
