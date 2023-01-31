@@ -3,16 +3,14 @@ from simulation import SIMULATION
 import sys
 from world import WORLD
 
-# print("A:", sys.argv)
-
 directOrGUI = sys.argv[1]
+solutionID = sys.argv[2]
 
-
-simulation = SIMULATION(directOrGUI)
+simulation = SIMULATION(directOrGUI, solutionID)
 simulation.Run()
 
 world = WORLD()
-robot = ROBOT()
+robot = ROBOT(solutionID)
 
 simulation.Get_Fitness()
 
