@@ -13,7 +13,7 @@ class SIMULATION:
         self.world = WORLD()
 
         # set up environment
-        self.physicsCLient = p.connect(p.GUI)
+        self.physicsCLient = p.connect(p.DIRECT)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
         # load world: the plane, the grey block, gravity

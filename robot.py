@@ -49,6 +49,6 @@ class ROBOT:
         f.write(str(xCoordinateOfLinkZero))
         f.close()
 
-        print("xcoord: ", xCoordinateOfLinkZero)
+        # print("xcoord: ", xCoordinateOfLinkZero)
         exit()
         
