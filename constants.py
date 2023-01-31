@@ -13,3 +13,6 @@ ampFrontLeg = numpy.pi/2
 forceFrontLeg = 50
 freqFrontLeg = 20
 phaseOffsetFrontLeg = 0
+
+# Hill Climber
+numberOfGenerations = 2

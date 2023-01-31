@@ -23,7 +23,11 @@ class SOLUTION:
         self.Create_Brain()
         self.Create_World()
         os.system("python3 simulate.py")
-        
+
+        # read in the fitness value
+        f = open("fitness.txt", "r")
+        self.fitness = f.read()
+        f.close()
 
     def Create_World(self):
         # tells pyrosim name of object file
