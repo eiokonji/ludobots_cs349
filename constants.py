@@ -15,4 +15,4 @@ freqFrontLeg = 20
 phaseOffsetFrontLeg = 0
 
 # Hill Climber
-numberOfGenerations = 2
+numberOfGenerations = 10

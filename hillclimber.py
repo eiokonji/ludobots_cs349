@@ -1,5 +1,6 @@
 import constants as c
 import copy
+import os
 from solution import SOLUTION
 
 class HILL_CLIMBER:
@@ -7,16 +8,16 @@ class HILL_CLIMBER:
         self.parent = SOLUTION()
         
     def Evolve(self):
-        self.parent.Evaluate()
+        self.parent.Evaluate("GUI")
 
-        # repeat spaen, mutate evaluate select for several generations
+        # repeat spawn, mutate, evaluate, select for several generations
         for currentGeneration in range(c.numberOfGenerations):
             self.Evolve_For_One_Generation()
 
     def Evolve_For_One_Generation(self):
         self.Spawn()
         self.Mutate()
-        self.child.Evaluate()
+        self.child.Evaluate("DIRECT")
         self.Print()
         self.Select()
 
@@ -34,3 +35,7 @@ class HILL_CLIMBER:
 
     def Print(self):
         print("p: ", self.parent.fitness, "| c: ", self.child.fitness)
+
+    def Show_Best(self):
+        self.parent.Evaluate("GUI")
+        # os.system("python3 simulate.py GUI")
