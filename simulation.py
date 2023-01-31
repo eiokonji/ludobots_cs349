@@ -46,7 +46,9 @@ class SIMULATION:
             # allow the robot to move, pass down current timestep
             self.robot.Act(it, self.robotId)
 
-            time.sleep(1/2400)
+            if self.directOrGUI == "GUI":
+                time.sleep(1/2400)
+            
 
     def __del__(self):
         # destructor: disconnect from the simulator
