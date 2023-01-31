@@ -16,3 +16,6 @@ phaseOffsetFrontLeg = 0
 
 # Hill Climber
 numberOfGenerations = 10
+
+# Parallel Hill Climber
+populationSize = 2 
