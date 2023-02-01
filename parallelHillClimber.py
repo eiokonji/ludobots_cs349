@@ -17,25 +17,17 @@ class PARALLEL_HILL_CLIMBER:
         
     def Evolve(self):
         # self.parent.Evaluate("GUI")
+        self.Evaluate(self.parents)
 
-        # # start the simulations in parallel for all parents
-        # for pop in range(c.populationSize):
-        #     # self.parents[pop].Evaluate("GUI")
-        #     self.parents[pop].Start_Simulation("DIRECT")
-
-        # # retrieve fitness values for each parent
-        # for pop in range(c.populationSize):
-        #     self.parents[pop].Wait_For_Simulation_To_End()
-
-        # repeat spawn, mutate, evaluate, select for several generations
-        for currentGeneration in range(c.numberOfGenerations):
-            self.Evolve_For_One_Generation()
+        # # repeat spawn, mutate, evaluate, select for several generations
+        # for currentGeneration in range(c.numberOfGenerations):
+        self.Evolve_For_One_Generation()
 
     def Evolve_For_One_Generation(self):
         # spawn, mutate, evaluate, select for one gen
         self.Spawn()
         self.Mutate()
-        # self.child.Evaluate("DIRECT")
+        self.Evaluate(self.children)
         # self.Print()
         # self.Select()
         
@@ -69,3 +61,14 @@ class PARALLEL_HILL_CLIMBER:
     def Show_Best(self):
         # self.parent.Evaluate("GUI")
         pass
+
+    def Evaluate(self, solutions):
+        # solutions is a SOLUTION object
+        # start the simulations in parallel for all parents
+        for pop in range(c.populationSize):
+            solutions[pop].Start_Simulation("DIRECT")
+
+        # retrieve fitness values for each parent
+        for pop in range(c.populationSize):
+            solutions[pop].Wait_For_Simulation_To_End()
+        

@@ -38,7 +38,7 @@ class SOLUTION:
         
         # read in the fitness value
         f = open("fitness" + str(self.myID) + ".txt", "r")
-        self.fitness = f.read()
+        self.fitness = float(f.read())
         # print(" ")
         # print(self.myID, ": ", self.fitness)
         f.close()
