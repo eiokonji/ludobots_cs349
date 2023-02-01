@@ -1,3 +1,4 @@
+import constants as c
 from motor import MOTOR
 import os
 import pybullet as p
@@ -42,7 +43,7 @@ class ROBOT:
             if self.nn.Is_Motor_Neuron(neuronName):
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
                 desiredAngle = self.nn.Get_Value_Of(neuronName)
-                self.motors[jointName].Set_Value(desiredAngle, robotId)
+                self.motors[jointName].Set_Value(c.motorJointRange * desiredAngle, robotId)
 
     def Get_Fitness(self, robotId):
         stateOfLinkZero = p.getLinkState(robotId, 0)

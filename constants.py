@@ -4,7 +4,7 @@ iterations = 1000
 
 # Back Leg constants
 ampBackLeg = -numpy.pi/2
-forceBackLeg = 50
+forceBackLeg = 40
 freqBackLeg = 20
 phaseOffsetBackLeg = 0
 
@@ -15,11 +15,12 @@ freqFrontLeg = 20
 phaseOffsetFrontLeg = 0
 
 # Hill Climber
-numberOfGenerations = 1
+numberOfGenerations = 10
 
 # Parallel Hill Climber
-populationSize = 1
+populationSize = 10
 
 # Quadruped
-numSensorNeurons = 3
-numMotorNeurons = 2
+numSensorNeurons = 5
+numMotorNeurons = 8
+motorJointRange = 0.2
