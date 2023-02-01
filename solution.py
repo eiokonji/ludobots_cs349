@@ -1,3 +1,4 @@
+import constants as c
 import numpy as np
 import os
 import pyrosim.pyrosim as pyrosim
@@ -21,7 +22,7 @@ tester = True
 
 class SOLUTION:
     def __init__(self, nextAvailableID) -> None:
-        self.weights = np.random.rand(3,2)
+        self.weights = np.random.rand(c.numSensorNeurons, c.numMotorNeurons)
         self.weights = self.weights * 2 - 1
         self.myID = nextAvailableID
 
@@ -76,18 +77,18 @@ class SOLUTION:
         # send values from sensors to neurons
         pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
         pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "BackLeg")
-        pyrosim.Send_Sensor_Neuron(name = 2 , linkName = "FrontLeg")
-        pyrosim.Send_Motor_Neuron(name = 3 , jointName = "Torso_BackLeg")
+        pyrosim.Send_Sensor_Neuron(name = c.numMotorNeurons , linkName = "FrontLeg")
+        pyrosim.Send_Motor_Neuron(name = c.numSensorNeurons , jointName = "Torso_BackLeg")
         pyrosim.Send_Motor_Neuron(name = 4 , jointName = "Torso_FrontLeg")
-        pyrosim.Send_Synapse( sourceNeuronName = 0 , targetNeuronName = 3 , weight = -1.5 )
-        pyrosim.Send_Synapse( sourceNeuronName = 1 , targetNeuronName = 3 , weight = -1.5 )
+        pyrosim.Send_Synapse( sourceNeuronName = 0 , targetNeuronName = c.numSensorNeurons , weight = -1.5 )
+        pyrosim.Send_Synapse( sourceNeuronName = 1 , targetNeuronName = c.numSensorNeurons , weight = -1.5 )
         pyrosim.Send_Synapse( sourceNeuronName = 0 , targetNeuronName = 4 , weight = -1.5 )
         pyrosim.Send_Synapse( sourceNeuronName = 1 , targetNeuronName = 4 , weight = -1.5 )
 
         # fully connected neural network
-        for currentRow in range(3):
-            for currentColumnn in range(2):
-                pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumnn+3 , weight = self.weights[currentRow][currentColumnn] )
+        for currentRow in range(c.numSensorNeurons):
+            for currentColumnn in range(c.numMotorNeurons):
+                pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumnn+c.numSensorNeurons , weight = self.weights[currentRow][currentColumnn] )
 
         pyrosim.End()
 

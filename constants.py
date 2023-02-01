@@ -15,7 +15,11 @@ freqFrontLeg = 20
 phaseOffsetFrontLeg = 0
 
 # Hill Climber
-numberOfGenerations = 10
+numberOfGenerations = 1
 
 # Parallel Hill Climber
-populationSize = 10
+populationSize = 1
+
+# Quadruped
+numSensorNeurons = 3
+numMotorNeurons = 2
