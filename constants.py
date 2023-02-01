@@ -15,7 +15,7 @@ freqFrontLeg = 20
 phaseOffsetFrontLeg = 0
 
 # Hill Climber
-numberOfGenerations = 10
+numberOfGenerations = 2
 
 # Parallel Hill Climber
 populationSize = 2 
