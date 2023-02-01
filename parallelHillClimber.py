@@ -32,11 +32,6 @@ class PARALLEL_HILL_CLIMBER:
         self.Select()
         
     def Spawn(self):
-        # # spawn a copy of parent -> child
-        # self.child = copy.deepcopy(self.parent)
-        # self.child.Set_ID(self.nextAvailableID)
-        # self.nextAvailableID += 1
-
         # child is a copy of parent but with their own ID
         self.children = {}
         for key in self.parents:
@@ -55,20 +50,22 @@ class PARALLEL_HILL_CLIMBER:
             if self.parents[key].fitness > self.children[key].fitness:
                 self.parents[key] = self.children[key]
 
-        # if self.parent.fitness > self.child.fitness:
-        #     self.parent = self.child
-
     def Print(self):
         # print parent and child fitness
         for key in self.parents:
             print(" ")
-            print("Parent: ", self.parents[key].fitness, "| Child: ", self.children[key].fitness)
+            print("Fitness:")
+            print("Parent: ", self.parents[key].fitness)
+            print("Child: ", self.children[key].fitness)
             print(" ")
 
-
     def Show_Best(self):
-        # self.parent.Evaluate("GUI")
-        pass
+        # returns the KEY
+        best = min(self.parents, key= lambda x: self.parents[x].fitness)
+        self.parents[best].Start_Simulation("GUI") 
+        print(" ")
+        print("Best fitness: ", self.parents[best].fitness)
+        print(" ")
 
     def Evaluate(self, solutions):
         # solutions is a SOLUTION object

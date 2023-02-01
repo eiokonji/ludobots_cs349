@@ -17,6 +17,8 @@ z = 0.5             # blue
 
 # os.system delete call in this file! - fitness
 
+tester = True
+
 class SOLUTION:
     def __init__(self, nextAvailableID) -> None:
         self.weights = np.random.rand(3,2)
@@ -25,9 +27,10 @@ class SOLUTION:
 
     def Start_Simulation(self, directOrGUI):
         # starts the simulation
-        self.Create_Body()
+        if tester == False or self.myID == 0:
+            self.Create_Body()        
+            self.Create_World()
         self.Create_Brain()
-        self.Create_World()
         os.system("start /B python3 simulate.py " + directOrGUI + " " + str(self.myID))
 
     def Wait_For_Simulation_To_End(self):
