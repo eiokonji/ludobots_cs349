@@ -14,7 +14,6 @@ world = WORLD()
 robot = ROBOT(solutionID)
 
 os.system("del brain"+str(solutionID)+".nndf")
-# os.system("del fitness"+str(solutionID)+".txt")
 
 simulation.Get_Fitness()
 
