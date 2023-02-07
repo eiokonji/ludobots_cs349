@@ -1,10 +1,10 @@
 import numpy
 
-iterations = 1000
+iterations = 4000
 
 # Back Leg constants
 ampBackLeg = -numpy.pi/2
-forceBackLeg = 40
+forceBackLeg = 100
 freqBackLeg = 20
 phaseOffsetBackLeg = 0
 
@@ -15,12 +15,15 @@ freqFrontLeg = 20
 phaseOffsetFrontLeg = 0
 
 # Hill Climber
-numberOfGenerations = 10
+numberOfGenerations = 1
 
 # Parallel Hill Climber
 populationSize = 10
 
 # Quadruped
 numSensorNeurons = 5
-numMotorNeurons = 8
-motorJointRange = 0.2
+numMotorNeurons = 4
+motorJointRange = 0.3
+
+# Task O
+gaitSpeed = 500000
