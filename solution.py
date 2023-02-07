@@ -32,7 +32,7 @@ class SOLUTION:
         # starts the simulation
         if tester == False or self.myID == 0:
             self.Create_Body()        
-            self.Create_World()
+            # self.Create_World()
         self.Create_Brain()
         os.system("start /B python3 simulate.py " + directOrGUI + " " + str(self.myID))
 
@@ -52,13 +52,13 @@ class SOLUTION:
         # delete fitness file once done reading it
         os.system("del fitness"+str(self.myID)+".txt")
 
-    def Create_World(self):
-        # tells pyrosim name of object file
-        pyrosim.Start_SDF("world.sdf")
-        #  create a single block at origin
-        pyrosim.Send_Cube(name="Box", pos=[x-2,y+2,z], size=[length, width, height])
+    # def Create_World(self):
+    #     # tells pyrosim name of object file
+    #     pyrosim.Start_SDF("world.sdf")
+    #     #  create a single block at origin
+    #     pyrosim.Send_Cube(name="Box", pos=[x-2,y+2,z], size=[length, width, height])
 
-        pyrosim.End()
+    #     pyrosim.End()
 
     def Create_Body(self):
         pyrosim.Start_URDF("body.urdf")
