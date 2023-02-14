@@ -5,28 +5,23 @@ import pyrosim.pyrosim as pyrosim
 import random as r
 import time
 
-# sets the initial position and size of a cube in object file. measured in metres.
-# size parameters
-length = np.random.rand()
-width = np.random.rand()
-height = np.random.rand()
-
-# position parameters
-x = 0               # red
-y = 0               # green
-z = 0.5             # blue
-
 # pyrosim.Send_Cube(name="Torso", pos=[x, y, z], size=[length, width, height])
-
-# os.system delete call in this file! - fitness
 
 tester = True
 
 class SOLUTION:
     def __init__(self, nextAvailableID) -> None:
-        self.weights = np.random.rand(c.numSensorNeurons, c.numMotorNeurons)
-        self.weights = self.weights * 2 - 1
+        # initialize ID, motors, links
         self.myID = nextAvailableID
+        self.links = np.random.randint(3, 9)
+        self.motors = self.links - 1
+
+        # sensors and weights
+        # self.sensormatrix -> random array of 0,1 saying which links get sensors and which dont
+        self.sensorsMatrix = np.random.randint(3, size=self.links)
+        self.sensors = np.count_nonzero(self.sensorsMatrix)
+        self.weights = np.random.rand(self.sensors, self.motors) * 2 - 1
+        # print(f"sensors: {self.sensorsMatrix}")
 
     def Start_Simulation(self, directOrGUI):
         # starts the simulation
@@ -45,48 +40,73 @@ class SOLUTION:
         pyrosim.End()
 
     def Create_Body(self):
+        # building robot body
         pyrosim.Start_URDF("body.urdf")
-        
-        pyrosim.Send_Cube(name= 0, pos=[0, 0, 1], size=[length, width, height])
 
-        ''' 
-        pyrosim.Send_Joint(name=, parent="Torso", child="FrontRight", type="revolute", position=[0.5, 0.5, 1], jointAxis= "1 0 0")
-        pyrosim.Send_Cube(name="FrontRight", pos=[0, 0, -1], size=[0.2, 0.2, 1])
+        # pyrosim.Send_Cube(name= f"Link{name}", pos=[0, 0, height/2], size=[length, width, height], color="cyan")
 
-        pyrosim.Send_Joint(name="Torso_FrontRight", parent="Torso", child="FrontRight", type="revolute", position=[0.5, 0.5, 1], jointAxis= "1 0 0")
-        pyrosim.Send_Cube(name="FrontRight", pos=[0, 0, -1], size=[0.2, 0.2, 1])
+        # ROOT LINK: absolute referencing
+        # name, length, width, height, x, y, z
+        name = 0
+        length = np.random.rand() * 0.5 + 0.1
+        width = np.random.rand() * 0.5 + 0.1
+        height = np.random.rand() * 0.5 + 0.1
 
-        pyrosim.Send_Joint(name="Torso_FrontLeft", parent="Torso", child="FrontLeft", type="revolute", position=[-0.5, 0.5, 1], jointAxis= "1 0 0")
-        pyrosim.Send_Cube(name="FrontLeft", pos=[0, 0, -1], size=[0.2, 0.2, 1])
+        u_range = 0.6
+        # l_range = 0.1
+        x = 0
+        y = 0
+        z = u_range/2
 
-        pyrosim.Send_Joint(name="Torso_BackRight", parent="Torso", child="BackRight", type="revolute", position=[0.5, -0.5, 1], jointAxis= "1 0 0")
-        pyrosim.Send_Cube(name="BackRight", pos=[0, 0, -1], size=[0.2, 0.2, 1])
+        # link: check for not-sensor (0) or sensor (1)
+        if self.sensorsMatrix[0] == 0:
+            pyrosim.Send_Cube(name= f"Link{name}", pos=[x, y, z], size=[length, width, height], color="cyan")
+        else:
+            pyrosim.Send_Cube(name= f"Link{name}", pos=[x, y, z], size=[length, width, height], color="green")
+        # joint: create joint to next link
+        pyrosim.Send_Joint(name=f"Link{name}_Link{name+1}", parent=f"Link{name}", child=f"Link{name+1}", type="revolute", position=[0, width/2, z], jointAxis="1 0 0")
 
-        pyrosim.Send_Joint(name="Torso_BackLeft", parent="Torso", child="BackLeft", type="revolute", position=[-0.5, -0.5, 1], jointAxis= "1 0 0")
-        pyrosim.Send_Cube(name="BackLeft", pos=[0, 0, -1], size=[0.2, 0.2, 1])
-        '''
+        # OTHER LINKS IN CHAIN: relative referencing
+        for l in range(1, self.links):
+            # send joint but only for L1_L2 and above
+            if l > 1:
+                pyrosim.Send_Joint(name=f"Link{l-1}_Link{l}", parent=f"Link{l-1}", child=f"Link{l}", type="revolute", position=[0, width*2, 0], jointAxis="1 0 0")
+
+            # generate new random measurements per run
+            length = np.random.rand() * 0.5 + 0.1
+            width = np.random.rand() * 0.5 + 0.1
+            height = np.random.rand() * 0.5 + 0.1
+
+            # create link
+            if self.sensorsMatrix[l] == 1:
+                pyrosim.Send_Cube(name= f"Link{l}", pos=[0, width, 0], size=[length*2, width*2, height*2], color="green")
+            else:
+                pyrosim.Send_Cube(name= f"Link{l}", pos=[0, width, 0], size=[length*2, width*2, height*2], color="cyan")
 
         pyrosim.End()
 
+    
     def Create_Brain(self):
+        # send values from sensors, motors to neurons
         pyrosim.Start_NeuralNetwork("brain.nndf")
 
-        # send values from sensors to neurons
-        # pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
-        # pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "BackLeft")
-        # pyrosim.Send_Sensor_Neuron(name = 2 , linkName = "FrontLeft")
-        # pyrosim.Send_Sensor_Neuron(name = 3 , linkName = "FrontLeft")
-        # pyrosim.Send_Sensor_Neuron(name = 4 , linkName = "BackRight")
-
+        # pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "0")
         # pyrosim.Send_Motor_Neuron(name = 5 , jointName = "Torso_BackLeft")
-        # pyrosim.Send_Motor_Neuron(name = 6 , jointName = "Torso_FrontRight")
-        # pyrosim.Send_Motor_Neuron(name = 7, jointName = "Torso_FrontLeft")
-        # pyrosim.Send_Motor_Neuron(name = 8, jointName = "Torso_BackRight")
+        
+        # motors
+        for m in range(self.motors):
+            pyrosim.Send_Motor_Neuron(name = m , jointName = f"Link{m}_Link{m+1}")
 
-        # # fully connected neural network
-        # for currentRow in range(c.numSensorNeurons):
-        #     for currentColumnn in range(c.numMotorNeurons):
-        #         pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumnn+c.numSensorNeurons , weight = self.weights[currentRow][currentColumnn] )
+        # sensors: sensormatrix!
+        for s in range(self.links):
+            if self.sensorsMatrix[s] == 1:
+                pyrosim.Send_Sensor_Neuron(name = s , linkName = f"Link{s}")
+
+        # fully connected neural network
+        # synapses
+        for s in range(self.sensors):
+            for m in range(self.motors):
+                pyrosim.Send_Synapse( sourceNeuronName = s , targetNeuronName = m , weight = self.weights[s][m] )
 
         pyrosim.End()
 
