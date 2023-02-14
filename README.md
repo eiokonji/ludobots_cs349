@@ -1,17 +1,30 @@
-# A5: Legs in Air
+# A6: Kinematicc Chain aka Snake
 
-## What Does It Do
-A four-legged, four-armed robot is spawned. It tries to get unto its head using only its legs, such that its legs are in the air.
+## Describing the Chain
+A kinematic chain (or snake) is spawned at the start of the program. The snake consists of conjoint cuboids; each cuboid has randomly generated dimensions. 
 
-## How Did I Do It
-I used a parallel hill climber optimization method to "evolve" the robots over generations. I included a simple sinusoidal pattern generator to evolve a different walking gait in the robots. I also adjusted the fitness function to allow evolution that caused the robot to land on its head. The robot has sensors (neurons) only in its four feet/legs, joints between each leg and the torso. Its neural map is made of synapses interconnecting the neurons and joints.
+*[insert image(s) of sample snakes]*
+
+These cuboids are connected by --- joints and each joint has a motor which can drive its movement. The motion is largely in the --- plane. The links may have sensors or not, but all sensors are synaptically connected to the motors.
+
+*[insert image(s) of showing joint motor direction]*
+
+Each link must have a minimum length of --- and a maximum length of ---. The links with sensors are color green ([insert color code]) while those without are blue ([insert color code]).
+
+*[insert image(s) of snake measurement and colors + legend]*
+
+## How Was It Made
+---
+
 
 ## How Can You Replicate It
 1. Clone the repository.
-2. Modify the ```constants.py``` folder to observe evolution after ```numberOfGenerations``` generations.
-3. Run the ```search.py``` file .
-   - **Alternatively** type in ```python3 search.py GUI``` into the terminal after navigating to the source folder.
+2. Navigate to your source folder.
+3. Run ```python3 simulate.py GUI 0``` in your terminal.
+
+**Note:** The program will spawn only one kinematic chain per run. To observe multiple randomly generated morphologies, repeat steps 1-3 above.
 
 ## Get More Information
 - [Ludobots MOOC](https://www.reddit.com/r/ludobots/wiki/finalproject/)
 - [Video showing Evolution](https://www.youtube.com/watch?v=yeb4aDyHc9s&list=PLrKF7RjvM_gn4lMEKNgkdVZTz8rV0q325&index=15)
+- [Pyrosim (forked)](https://github.com/jbongard/pyrosim)

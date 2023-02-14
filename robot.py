@@ -9,9 +9,8 @@ from sensor import SENSOR
 # os.system delete call in this file! - brain
 
 class ROBOT:
-    def __init__(self, solutionID) -> None:
-        self.nn = NEURAL_NETWORK("brain"+str(solutionID)+".nndf")
-        self.solutionID = solutionID
+    def __init__(self) -> None:
+        self.nn = NEURAL_NETWORK("brain.nndf")
         # os.system("del brain"+str(solutionID)+".nndf")
 
     def Prepare_To_Sense(self):
@@ -44,20 +43,3 @@ class ROBOT:
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
                 desiredAngle = self.nn.Get_Value_Of(neuronName)
                 self.motors[jointName].Set_Value(c.motorJointRange * desiredAngle, robotId)
-
-    def Get_Fitness(self, robotId):
-        basePositionAndOrientation = p.getBasePositionAndOrientation(robotId)
-        basePosition = basePositionAndOrientation[0]
-        # xPosition = basePosition[0]
-        zPosition = basePosition[2]
-
-
-        # # write x-coordinate to a new temporary file
-        # f = open("fitness" + str(self.solutionID) + ".txt", "w")
-        f = open("tmp" + str(self.solutionID) + ".txt", "w")
-        f.write(str(zPosition))
-        f.close()
-        os.system("rename tmp" + str(self.solutionID) + ".txt fitness" + str(self.solutionID) + ".txt")
-
-        # print("xcoord: ", xCoordinateOfLinkZero)
-        exit()

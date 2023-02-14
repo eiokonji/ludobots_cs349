@@ -8,10 +8,9 @@ from world import WORLD
 
 
 class SIMULATION:
-    def __init__(self, directOrGUI, solutionID) -> None:
+    def __init__(self, directOrGUI) -> None:
         self.directOrGUI = directOrGUI
-        self.solutionID = solutionID
-        self.robot = ROBOT(self.solutionID)
+        self.robot = ROBOT()
         self.world = WORLD()
 
         # set up environment
@@ -19,10 +18,10 @@ class SIMULATION:
             self.physicsCLient = p.connect(p.DIRECT)
         else:
             self.physicsCLient = p.connect(p.GUI)
+        p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
-        # load world: the plane, the grey block, gravity
-        # load robot: robot,
+        # load world & robot
         p.setGravity(0, 0, -9.8)
         p.loadSDF("world.sdf")
         self.planeId = p.loadURDF("plane.urdf")
@@ -53,6 +52,3 @@ class SIMULATION:
     def __del__(self):
         # destructor: disconnect from the simulator
         p.disconnect()
-
-    def Get_Fitness(self):
-        self.robot.Get_Fitness(self.robotId)
