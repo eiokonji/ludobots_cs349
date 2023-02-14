@@ -1,9 +1,9 @@
-# A6: Kinematicc Chain aka Snake
+# A6: Kinematic Chain aka Snake
 
 ## Describing the Chain
 A kinematic chain (or snake) is spawned at the start of the program. The snake consists of conjoint cuboids; each cuboid has randomly generated dimensions. 
 
-*[insert image(s) of sample snakes]*
+*![Snake 1](<img width="176" alt="image" src="https://user-images.githubusercontent.com/116220220/218651790-f82da150-3aac-49f2-b09f-3882c08b90e7.png">)*
 
 These cuboids are connected by --- joints and each joint has a motor which can drive its movement. The motion is largely in the --- plane. The links may have sensors or not, but all sensors are synaptically connected to the motors.
 
