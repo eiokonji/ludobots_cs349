@@ -21,7 +21,6 @@ class SOLUTION:
         self.sensorsMatrix = np.random.randint(3, size=self.links)
         self.sensors = np.count_nonzero(self.sensorsMatrix)
         self.weights = np.random.rand(self.sensors, self.motors) * 2 - 1
-        # print(f"sensors: {self.sensorsMatrix}")
 
     def Start_Simulation(self, directOrGUI):
         # starts the simulation
@@ -34,16 +33,11 @@ class SOLUTION:
     def Create_World(self):
         # tells pyrosim name of object file
         pyrosim.Start_SDF("world.sdf")
-        #  create a single block at origin
-        # pyrosim.Send_Cube(name="Box", pos=[x-2,y+2,z], size=[length, width, height])
-
         pyrosim.End()
 
     def Create_Body(self):
         # building robot body
         pyrosim.Start_URDF("body.urdf")
-
-        # pyrosim.Send_Cube(name= f"Link{name}", pos=[0, 0, height/2], size=[length, width, height], color="cyan")
 
         # ROOT LINK: absolute referencing
         # name, length, width, height, x, y, z
@@ -53,7 +47,6 @@ class SOLUTION:
         height = np.random.rand() * 0.5 + 0.1
 
         u_range = 0.6
-        # l_range = 0.1
         x = 0
         y = 0
         z = u_range/2
