@@ -27,5 +27,5 @@ Each link must have a minimum length of 0.1m and a maximum length of 0.6m The li
 
 ## Get More Information
 - [Ludobots MOOC](https://www.reddit.com/r/ludobots/wiki/finalproject/)
-- [Video showing Evolution](https://www.youtube.com/watch?v=yeb4aDyHc9s&list=PLrKF7RjvM_gn4lMEKNgkdVZTz8rV0q325&index=15)
+- [Video on Kinematic Chains](https://www.youtube.com/watch?v=ykDgNwOB8m4&list=PLrKF7RjvM_gn4lMEKNgkdVZTz8rV0q325&index=16)
 - [Pyrosim (forked)](https://github.com/jbongard/pyrosim)
