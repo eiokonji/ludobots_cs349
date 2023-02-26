@@ -1,21 +1,20 @@
-# A6: Kinematic Chain aka Snake
+# A8: Evolving for Locomotion
 
-## What Is The Snake
-A kinematic chain (or snake) is spawned at the start of the program. The snake consists of conjoint cuboids; each cuboid has randomly generated dimensions. 
+## What Is The Creature
+[description of creature: what is it? what does it do? how was it evolved? anything physically relevant?]
 
-![Snake 1](/img1.png)
+!/[Snake 1](/img1.png)
 
-These cuboids are connected by revolute joints and each joint has a motor which can drive its movement. The motion is in the yz plane (see black arrow) and allows movement towards the user (see red arrow). The links may have sensors or not, but all sensors are synaptically connected to the motors.
+[how is it connected (joints, neural mapping)? what is it's range of motion? what direction does it move in? sensors/motors/other features?]
 
-![Snake 2](/img2.png)
+!/[Snake 2](/img2.png)
 
-Each link must have a minimum length of 0.1m and a maximum length of 0.6m The links with sensors are green while those without are blue, see earlier images for examples.
+[miscellaneous information: what evolution strategy (how did evolution occur: seeding, parent-child comparison), what population size, what number of generations]
+
+!/[a plot containing five fitness curves, each starting from a different random seed (1,2,3,4,5), showing the fitness of the best creature in the population at each generation]
 
 ## How Was It Made
-- Updated files in ```pyrosim``` folder to allow color-coding based on presence (or absence) of sensors.
-- Defined matrices to store sensor values for each link and its index.
-- Defined motors for each link and defined joints between contiguous links.
-- Built neural network of synapses between motors and sensors.
+### what did you change?
 
 ## How Can You Replicate It
 1. Clone the repository.
@@ -23,9 +22,9 @@ Each link must have a minimum length of 0.1m and a maximum length of 0.6m The li
 3. Run ```python3 simulate.py GUI``` in your terminal.
    - You can alternatively navigate to and run the ```search.py``` file using an IDE.
 
-**Note:** The program will spawn only one kinematic chain per run. To observe multiple randomly generated morphologies, repeat steps 1-3 above as many times as you'd like.  
+**Note:** include information on what happens after conducting one run, how to generate plot
 
 ## Get More Information
 - [Ludobots MOOC](https://www.reddit.com/r/ludobots/wiki/finalproject/)
-- [Video on Kinematic Chains](https://www.youtube.com/watch?v=ykDgNwOB8m4&list=PLrKF7RjvM_gn4lMEKNgkdVZTz8rV0q325&index=16)
+- [Video Showing Evolution](...)
 - [Pyrosim (forked)](https://github.com/jbongard/pyrosim)
