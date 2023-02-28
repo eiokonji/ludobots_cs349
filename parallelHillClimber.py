@@ -5,7 +5,7 @@ import os
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
-        # delete files from old simulations
+        # delete old files
         os.system("del brain*.nndf")
         os.system("del fitness*.txt")
         os.system("del body*.urdf")
@@ -79,7 +79,7 @@ class PARALLEL_HILL_CLIMBER:
         best = min(self.parents, key= lambda x: self.parents[x].fitness)
         bestFitness = self.parents[best].fitness
         
-        f = open(f"FitnessData/{c.populationSize}_{c.numberOfGenerations}_{c.seed}.txt", "a")
+        f = open(f"data/{c.populationSize}_{c.numberOfGenerations}_{c.seed}.txt", "a")
         f.write(f"{bestFitness}\n")
         f.close()
 
