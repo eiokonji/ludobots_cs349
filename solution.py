@@ -1,114 +1,303 @@
-import constants as c
 import numpy as np
-import os
 import pyrosim.pyrosim as pyrosim
-import random as r
+import os
+import random
 import time
-
-# pyrosim.Send_Cube(name="Torso", pos=[x, y, z], size=[length, width, height])
-
-tester = True
+import constants as c
+import math
 
 class SOLUTION:
-    def __init__(self, nextAvailableID) -> None:
-        # initialize ID, motors, links
-        self.myID = nextAvailableID
-        self.links = np.random.randint(3, 9)
-        self.motors = self.links - 1
+    def __init__(self, nextAvailableId):
+        self.myID = nextAvailableId
 
-        # sensors and weights
-        # self.sensormatrix -> random array of 0,1 saying which links get sensors and which dont
-        self.sensorsMatrix = np.random.randint(3, size=self.links)
-        self.sensors = np.count_nonzero(self.sensorsMatrix)
-        self.weights = np.random.rand(self.sensors, self.motors) * 2 - 1
-        # print(f"sensors: {self.sensorsMatrix}")
+        # links with appendages
+        self.noLimbed = 0
+        self.limbedData = {
+            "total": random.randint(1, 3),           
+            "x": random.random() * 0.25 + 0.02,          
+            "y": random.random() * 0.25 + 0.02,
+            "z": random.random() * 0.25 + 0.02
+        }
 
-    def Start_Simulation(self, directOrGUI):
-        # starts the simulation
-        if tester == False or self.myID == 0:
-            self.Create_Body()        
-            self.Create_World()
+        # appendages
+        self.noLimbs = 0
+        self.LimbsData = {
+            "total": random.randint(1, 4),          
+            "x": random.random() * 0.25 + 0.02,
+            "y": random.random() * 0.25 + 0.02,
+            "z": random.random() * 0.25 + 0.02
+        }
+
+        # links without appendages
+        self.noLimbless = 0
+        self.LimblessData = 
+            [["total": random.randint(0, 2)],           
+            ["x": random.random() * 0.25 + 0.02],
+            ["y": random.random() * 0.25 + 0.02],
+            ["z": rando]m.random() * 0.25 + 0.02]
+        
+
+        self.noTips = 0
+        self.tipsData = {
+            "total": random.randint(1, 2),           
+            "x": random.random() * 0.25 + 0.02,
+            "y": random.random() * 0.25 + 0.02,
+            "z": random.random() * 0.25 + 0.02
+        }
+
+        self.sensorNeurons = []     # links to add sensor neurons
+        self.motorNeurons = []      # joint names to add motor neurons
+        self.synapses = []          # (sensorNumber, motorNumber) for synapses
+        self.weights = {}           # (sensorNumber, motorNumber): weights 
+            
+        self.Create_World()
+        self.Create_Body()
         self.Create_Brain()
-        os.system("start /B python3 simulate.py " + directOrGUI + " " + str(self.myID))
+
+    # ----------------------------------------------------------
+    #                       create world/sim
+    # ----------------------------------------------------------
+
+    def Set_ID(self, nextAvailableId):
+        self.myID = nextAvailableId
+    
+    def Start_Simulation(self, directOrGUI):
+        self.Create_Body()
+        self.Create_Brain()
+        # suppress errors
+        os.system(f"start /B python simulate.py {directOrGUI} {self.myID} >nul 2>&1")
+        
+    def Wait_For_Simulation_To_End(self):
+        # check simulation is finished and fitness file ready to be read OTHERWISE sleep search.py
+        # DONT CHANGE THE TIME SLEEP PERIOD
+        while not os.path.exists(f"fitness{self.myID}.txt"):
+            time.sleep(1/100)
+
+        # read in the fitness value
+        while True:
+            try:
+                f = open(f"fitness{self.myID}.txt", "r")
+                break
+            except:
+                pass
+        self.fitness = float(f.read())
+        f.close()
 
     def Create_World(self):
         # tells pyrosim name of object file
         pyrosim.Start_SDF("world.sdf")
-        #  create a single block at origin
-        # pyrosim.Send_Cube(name="Box", pos=[x-2,y+2,z], size=[length, width, height])
-
         pyrosim.End()
 
-    def Create_Body(self):
-        # building robot body
-        pyrosim.Start_URDF("body.urdf")
+    # ----------------------------------------------------------
+    #                            mutation
+    # ----------------------------------------------------------
 
-        # pyrosim.Send_Cube(name= f"Link{name}", pos=[0, 0, height/2], size=[length, width, height], color="cyan")
+    def Mutate(self):
+        # modify the body and the brain
+        self.Mutate_Body()
+        self.Mutate_Brain()
 
-        # ROOT LINK: absolute referencing
-        # name, length, width, height, x, y, z
-        name = 0
-        length = np.random.rand() * 0.5 + 0.1
-        width = np.random.rand() * 0.5 + 0.1
-        height = np.random.rand() * 0.5 + 0.1
+    def Mutate_Body(self):
+        # what body part is changing?
+        what = random.random()
 
-        u_range = 0.6
-        # l_range = 0.1
-        x = 0
-        y = 0
-        z = u_range/2
+        # the limbed links
+        if what <= 0.25:
+            self.limbedData = self.Mutate_Dims(self.limbedData)
 
-        # link: check for not-sensor (0) or sensor (1)
-        if self.sensorsMatrix[0] == 0:
-            pyrosim.Send_Cube(name= f"Link{name}", pos=[x, y, z], size=[length, width, height], color="cyan")
+        # the limbless links
+        elif what <= 0.5:
+            self.LimblessData = self.Mutate_Dims(self.LimblessData)
+
+        # the limbs
+        elif what <= 0.75:
+            self.LimbsData = self.Mutate_Dims(self.LimbsData)
+
         else:
-            pyrosim.Send_Cube(name= f"Link{name}", pos=[x, y, z], size=[length, width, height], color="green")
-        # joint: create joint to next link
-        pyrosim.Send_Joint(name=f"Link{name}_Link{name+1}", parent=f"Link{name}", child=f"Link{name+1}", type="revolute", position=[0, width/2, z], jointAxis="1 0 0")
+            self.tipsData = self.Mutate_Dims(self.tipsData)
 
-        # OTHER LINKS IN CHAIN: relative referencing
-        for l in range(1, self.links):
-            # send joint but only for L1_L2 and above
-            if l > 1:
-                pyrosim.Send_Joint(name=f"Link{l-1}_Link{l}", parent=f"Link{l-1}", child=f"Link{l}", type="revolute", position=[0, width*2, 0], jointAxis="1 0 0")
+    def Mutate_Dims(self, dim):
+        # what are you changing: total number of type, length, width, height
+        what = random.random()
 
-            # generate new random measurements per run
-            length = np.random.rand() * 0.5 + 0.1
-            width = np.random.rand() * 0.5 + 0.1
-            height = np.random.rand() * 0.5 + 0.1
-
-            # create link
-            if self.sensorsMatrix[l] == 1:
-                pyrosim.Send_Cube(name= f"Link{l}", pos=[0, width, 0], size=[length*2, width*2, height*2], color="green")
+        # change total number of types
+        if what <= 0.25:
+            delta = dim["total"] + random.choice((1, -1))
+            if delta != 0:
+                dim["total"] = delta
             else:
-                pyrosim.Send_Cube(name= f"Link{l}", pos=[0, width, 0], size=[length*2, width*2, height*2], color="cyan")
+                dim["total"] = 1
 
-        pyrosim.End()
+        # change length
+        elif what <= 0.5: 
+            delta = dim["x"] + (random.random() * 0.22 - 0.11)
+            if delta > 0:
+                dim["x"] = delta
 
-    
+        # change width 
+        elif what <= 0.75:
+            delta = dim["y"] + (random.random() * 0.22 - 0.11)
+            if delta > 0:
+                dim["y"] = delta
+
+        # change height
+        else:
+            delta = dim["z"] + (random.random() * 0.22 - 0.11)
+            if delta > 0:
+                dim["z"] = delta
+
+        return dim
+
+    def Mutate_Brain(self):
+        # turn listofKeys -> listofTuples, choose a random pair and change its weight
+        keysTuple = tuple(self.weights.keys())
+        self.weights[keysTuple[random.randint(0, len(keysTuple)-1)]] = random.random() * 2 - 1
+
+    # ----------------------------------------------------------
+    #                     create body + brain
+    # ----------------------------------------------------------
+
     def Create_Brain(self):
-        # send values from sensors, motors to neurons
-        pyrosim.Start_NeuralNetwork("brain.nndf")
+        pyrosim.Start_NeuralNetwork(f"brain{self.myID}.nndf")
 
-        # pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "0")
-        # pyrosim.Send_Motor_Neuron(name = 5 , jointName = "Torso_BackLeft")
-        
-        # motors
-        for m in range(self.motors):
-            pyrosim.Send_Motor_Neuron(name = m , jointName = f"Link{m}_Link{m+1}")
+        # create a sensor neuron in each foot
+        for i in range(len(self.sensorNeurons)):
+            pyrosim.Send_Sensor_Neuron(f"sensor{i}", f"foot{self.sensorNeurons[i]}")
 
-        # sensors: sensormatrix!
-        for s in range(self.links):
-            if self.sensorsMatrix[s] == 1:
-                pyrosim.Send_Sensor_Neuron(name = s , linkName = f"Link{s}")
+        # create motor neurons in each joint
+        for i in range(len(self.motorNeurons)):
+            pyrosim.Send_Motor_Neuron(f"motor{i}", self.motorNeurons[i])
 
-        # fully connected neural network
-        # synapses
-        for s in range(self.sensors):
-            for m in range(self.motors):
-                pyrosim.Send_Synapse( sourceNeuronName = s , targetNeuronName = m , weight = self.weights[s][m] )
+        # connect each sensor neurons to the motor joints along its corresponding limbed and no-limb joints
+        for tup in self.synapses:
+            pyrosim.Send_Synapse(f"sensor{tup[0]}", f"motor{tup[1]}", self.weights[tup])
 
         pyrosim.End()
 
-    def Set_ID(self, nextAvailableID):
-        self.myID = nextAvailableID
+    def Create_Body(self):  
+        pyrosim.Start_URDF(f"body{self.myID}.urdf")
+
+        # root link should have largest height
+        self.rootHeight = self.tipsData["total"]*2*self.tipsData["z"]
+        largeZ = max(self.limbedData["z"], self.LimblessData["z"], self.LimbsData["z"])
+        if largeZ > self.rootHeight:
+            self.rootHeight = largeZ
+
+        # reset all initialized terms in each run
+        self.noLimbless = 0
+        self.noTips = 0
+        self.noLimbs = 0
+        self.noLimbed = 0
+
+        self.sensorNeurons.clear()
+        self.motorNeurons.clear()
+        self.synapses.clear()
+
+        # create limbed link, absolute position (root)
+        self.Create_Limbed_Link([0, 0, self.rootHeight])
+        
+        pyrosim.End()
+
+    def Create_Limbed_Link(self, position):
+        # create limbed link && update noLimbed everytime a new limbed link is created
+        pyrosim.Send_Cube(name=f"limbed{self.noLimbed}", pos=position, size=[2*self.limbedData["x"], 2*self.limbedData["y"], 2*self.limbedData["z"]], color="cyan")
+        self.noLimbed += 1
+
+        # create limbs on either side of link
+        for i in (1, -1): 
+            jointPos = [self.limbedData["x"], i*self.limbedData["y"], 0]
+
+            # different behavior for adding limbs to root link - absolute ref
+            if self.noLimbed == 1: 
+                jointPos[2] = self.rootHeight 
+                jointPos[0] = 0
+            
+            # create joint Limbed_Limb && need to send motor neuron && create limb
+            pyrosim.Send_Joint(name=f"limbed{self.noLimbed-1}_leg{self.noLimbs}", parent=f"limbed{self.noLimbed-1}", child=f"leg{self.noLimbs}", type="revolute" ,position=jointPos, jointAxis="1 0 0")
+            self.motorNeurons.append(f"limbed{self.noLimbed-1}_leg{self.noLimbs}")
+            self.Create_Limb([0, i*self.LimbsData["y"], 0], 0, i)
+
+        # if time: add links in +ve z direction ??
+
+        # check that all links with limbs were created
+        if self.noLimbed < self.limbedData["total"]:
+            # create 
+            jointPos = [2*self.limbedData["x"], 0, 0]
+            if self.noLimbed == 1: # first limbed link means joint position is absolute, not relative
+                jointPos[2] = self.rootHeight
+                jointPos[0] = self.limbedData["x"]
+
+            # alternate limbs and no-limbs segments if it exists; otherwise create limbs segment
+            if self.LimblessData["total"] > 0: 
+                # create joint Limbed_Limbless && need to send motor neuron && create limbless
+                pyrosim.Send_Joint(name=f"limbed{self.noLimbed-1}_limbless{self.noLimbless}", parent=f"limbed{self.noLimbed-1}", child=f"limbless{self.noLimbless}", type="revolute", position=jointPos, jointAxis="0 0 1")
+                self.motorNeurons.append(f"limbed{self.noLimbed-1}_limbless{self.noLimbless}")
+                self.Create_Limbless_Link([self.LimblessData["x"], 0, 0], 0)
+
+            else: 
+                # create joint Limbed_Limbed && need to send motor neuron && create limbed
+                pyrosim.Send_Joint(name=f"limbed{self.noLimbed-1}_limbed{self.noLimbed}", parent=f"limbed{self.noLimbed-1}", child=f"limbed{self.noLimbed}", type="revolute", position=jointPos, jointAxis="0 0 1")
+                self.motorNeurons.append(f"limbed{self.noLimbed-1}_limbed{self.noLimbed}")
+                self.Create_Limbed_Link([self.limbedData["x"], 0, 0])
+
+    def Create_Limbless_Link(self, position, counter):
+        # create limbless link, update no of limbless links created
+        pyrosim.Send_Cube(name=f"limbless{self.noLimbless}", pos=position, size=[2*self.LimblessData["x"], 2*self.LimblessData["y"], 2*self.LimblessData["z"]], color="cyan")
+        self.noLimbless += 1
+
+        # determine joint location
+        jointPos = [2*self.LimblessData["x"], 0, 0]
+
+        # have all limbless links been made?
+        if counter < self.LimblessData["total"] - 1:
+            # no -> make more (joint Limbless_Limbless - motor neuron - limbless link)
+            pyrosim.Send_Joint(name=f"limbless{self.noLimbless - 1}_limbless{self.noLimbless}", parent=f"limbless{self.noLimbless-1}", child=f"limbless{self.noLimbless}", type="revolute", position=jointPos, jointAxis="0 0 1")
+            self.motorNeurons.append(f"limbless{self.noLimbless - 1}_limbless{self.noLimbless}")
+            # have to update the number or limbless that need to be done
+            self.Create_Limbless_Link([self.LimblessData["x"], 0, 0], counter + 1)
+
+        else: 
+            # yes -> make a limbed link (joint Limbless_Limbed - motor neuron - limbed link)
+            pyrosim.Send_Joint(name=f"limbless{self.noLimbless - 1}_limbed{self.noLimbed}", parent=f"limbless{self.noLimbless-1}", child=f"limbed{self.noLimbed}", type="revolute", position=jointPos, jointAxis="0 0 1")
+            self.motorNeurons.append(f"limbless{self.noLimbless - 1}_limbed{self.noLimbed}")
+            self.Create_Limbed_Link([self.limbedData["x"], 0, 0])
+
+    def Create_Limb(self, position, counter, multiplier):
+        # create the leg link, update no of limbs created in creature
+        pyrosim.Send_Cube(name=f"leg{self.noLimbs}", pos=position, size=[2*self.LimbsData["x"], 2*self.LimbsData["y"], 2*self.LimbsData["z"]], color="cyan")
+        self.noLimbs += 1
+
+        # where should joint be?
+        yPos = multiplier * self.LimbsData["y"] 
+        
+        # have all limbs been created?
+        if counter < self.LimbsData["total"] - 1:
+            # no: make more (joint Limbed_Limb - motor neuron - limb)
+            pyrosim.Send_Joint(name=f"leg{self.noLimbs-1}_leg{self.noLimbs}", parent=f"leg{self.noLimbs-1}", child=f"leg{self.noLimbs}", type="revolute", position=[0, 2*yPos, 0], jointAxis="1 0 0")
+            self.motorNeurons.append(f"leg{self.noLimbs-1}_leg{self.noLimbs}")
+            self.Create_Limb([0, yPos, 0], counter+1, multiplier)
+
+        else: 
+            # yes: make tips (joint Limb_Tip - motor neuron - tip)
+            if self.tipsData["total"] > 0:
+                pyrosim.Send_Joint(name=f"leg{self.noLimbs-1}_foot{self.noTips}", parent=f"leg{self.noLimbs-1}", child=f"foot{self.noTips}", type="revolute", position=[0, 2*yPos, 0], jointAxis="0 1 0")
+                self.motorNeurons.append(f"leg{self.noLimbs-1}_foot{self.noTips}")
+                
+        color = "cyan"
+        if counter == self.tipsData["total"] - 1: # bottom foot
+            color = "green"
+            self.sensorNeurons.append(self.noTips)
+
+        
+        for s in range(self.sensorNeurons):
+            for m in range(self.motorNeurons):
+                pyrosim.Send_Synapse( sourceNeuronName = s , targetNeuronName = m + self.numberSensorNeurons , weight = self.weights[s][m])
+
+        pyrosim.Send_Cube(name=f"foot{self.noTips}", pos=position, size=[2*self.tipsData["x"], 2*self.tipsData["y"], 2*self.tipsData["z"]], color=color)
+        self.noTips += 1
+
+        
+        if counter < self.tipsData["total"] - 1:
+            pyrosim.Send_Joint(name=f"foot{self.noTips-1}_foot{self.noTips}", parent=f"foot{self.noTips-1}", child=f"foot{self.noTips}", type="revolute", position=[0, 0, -2 * self.tipsData["z"]], jointAxis="0 1 1")
+            self.motorNeurons.append(f"foot{self.noTips-1}_foot{self.noTips}")
+            self.Create_Foot_Link([0, 0, -1 * self.tipsData["z"]], counter+1)

@@ -1,17 +1,10 @@
-from robot import ROBOT
 from simulation import SIMULATION
 import sys
-from world import WORLD
-import os
 
 directOrGUI = sys.argv[1]
+solutionID = sys.argv[2]
+simulation = SIMULATION(directOrGUI, solutionID)
 
-simulation = SIMULATION(directOrGUI)
 simulation.Run()
-
-world = WORLD()
-robot = ROBOT()
-
-
-
+simulation.Get_Fitness(solutionID)
 

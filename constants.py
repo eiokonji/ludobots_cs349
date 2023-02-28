@@ -1,29 +1,12 @@
-import numpy
+# constants file
 
-iterations = 4000
+gravity = -9.8
+maxForce = 50
+iterations = 1000
 
-# Back Leg constants
-ampBackLeg = -numpy.pi/2
-forceBackLeg = 100
-freqBackLeg = 20
-phaseOffsetBackLeg = 0
-
-# Back Leg constants
-ampFrontLeg = numpy.pi/2
-forceFrontLeg = 50
-freqFrontLeg = 20
-phaseOffsetFrontLeg = 0
-
-# Hill Climber
-numberOfGenerations = 1
-
-# Parallel Hill Climber
+numberOfGenerations = 10
 populationSize = 10
 
-# Quadruped
-numSensorNeurons = 5
-numMotorNeurons = 4
-motorJointRange = 0.3
+motorJointRange = 0.5
 
-# Task O
-gaitSpeed = 500000
+seed = 1
