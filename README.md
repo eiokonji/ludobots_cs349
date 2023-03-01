@@ -27,7 +27,7 @@ Pop 1                                                            |  Pop 2
 - **Brain**: Randomly selecting a neuron pair and modifying the weight assigned to their synaptic connections.
 - **Body**: Randomly selecting a body part and modifying its dimensions (i.e. length, width, height)
 
-For this codebase, there were 25 families (**population size**) and evolution occured across 80 generations (**number of generations**). Also, this codebase used a technique called seeding. This allows the user to observe a specific randomly generated families' generational evolution multiple times by passing in a seed number. Below, you can see how five different seeds evolved over 100 generations.
+For this codebase, there were 25 families (**population size**) and evolution occured across 100 generations (**number of generations**). Also, this codebase used a technique called seeding. This allows the user to observe a specific randomly generated families' generational evolution multiple times by passing in a seed number. Below, you can see how five different seeds evolved over 100 generations.
 
 ![a plot containing five fitness curves, each starting from a different random seed (1,2,3,4,5), showing the fitness of the best creature in the population at each generation](/plot/fCurve.png)
 
