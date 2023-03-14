@@ -5,7 +5,7 @@ import os
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
-        # delete old files
+        # delete files from old simulations
         os.system("del brain*.nndf")
         os.system("del fitness*.txt")
         os.system("del body*.urdf")
@@ -34,7 +34,7 @@ class PARALLEL_HILL_CLIMBER:
         self.Spawn()
         self.Mutate()
         self.Evaluate(self.children)
-        # self.Print(currentGen)
+        self.Print(currentGen)
         self.Select()
 
     def Evaluate(self, solutions):
@@ -60,15 +60,22 @@ class PARALLEL_HILL_CLIMBER:
             self.children[child].Mutate()
 
     def Select(self):
-        # parent <- child if parent is less fit
+        # (1) all parents, children go into 1 big population
+        self.everyone = []
         for key in self.parents:
-            if self.parents[key].fitness < self.children[key].fitness:
-                self.parents[key] = self.children[key]
+            self.everyone.append(self.parents[key])
+        for key in self.children:
+            self.everyone.append(self.children[key])
+        # (2) sort the whole population by creatures' fitness
+        self.everyone.sort(key= lambda x: x.fitness, reverse= True)
+        # (3) self.parent <- c.populationSize fittest creatures
+        for i in range(c.populationSize):
+            self.parents[i] = self.everyone[i]
 
     def Show_Best(self):
         # find and simulate parent with best fitness
         # returns the KEY
-        best = min(self.parents, key= lambda x: self.parents[x].fitness)
+        best = max(self.parents, key= lambda x: self.parents[x].fitness)
         self.parents[best].Start_Simulation("GUI") 
         print(f"\nBest fitness: {self.parents[best].fitness: .3f}")
 
@@ -76,10 +83,10 @@ class PARALLEL_HILL_CLIMBER:
         # works like Show_Best but stores it in a file instead
         # more for drawing the fitness plot
         # best <- KEY of most fit parent
-        best = min(self.parents, key= lambda x: self.parents[x].fitness)
+        best = max(self.parents, key= lambda x: self.parents[x].fitness)
         bestFitness = self.parents[best].fitness
         
-        f = open(f"data/{c.populationSize}_{c.numberOfGenerations}_{c.seed}.txt", "a")
+        f = open(f"FitnessData/{c.populationSize}_{c.numberOfGenerations}_{c.seed}.txt", "a")
         f.write(f"{bestFitness}\n")
         f.close()
 
