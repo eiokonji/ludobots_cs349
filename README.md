@@ -14,4 +14,3 @@ You can observe the evolutionary improvement in the [video deliverable](https://
 - [Link to Dr. Bongard's GitHub Pyrosim Repository](https://github.com/jbongard/pyrosim.git)
 - [More on Hill Climbing Strategy](https://en.wikipedia.org/wiki/Hill_climbing)
 - [Guide to Pybullet](https://docs.google.com/document/d/10sXEhzFRSnvFcl3XxNGhnD4N2SedqwdAvK3dsihxVUA/edit)
-- [Using the OS Library](https://docs.python.org/3/library/os.html)
