@@ -5,7 +5,7 @@ In this section of the course, I implemented a version of closed loop control fo
 
 To do this, I generated a neural network which:
 1.  Generated **sensor neurons**, allowed them to receive input from the robot's sensors and updated the sensor neurons' value at each simulation.
-2.  Generated **motor neurons**, propagated the sensor neuron values to it and sent these values to the robots' joints using synapses.
+2.  Generated **motor neurons**, determined the motors' desired angle and sent these values post-conversion to the robots' joints.
 
 ## Deliverables
 Here is the link to the [video deliverable](https://youtu.be/TKKg9ugYaUs).
