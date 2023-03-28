@@ -8,5 +8,5 @@ Here is the final image:
 <img href="https://imgur.com/ghsDFSb"><img src="https://i.imgur.com/ghsDFSb.png" title="source: imgur.com" width=80% height=80%/>
 
 ## Resources
-- [Link to Dr. Bongard's Reddit Course](https://www.reddit.com/r/ludobots/wiki/onelink/)
+- [Link to Dr. Bongard's Reddit Course](https://www.reddit.com/r/ludobots/wiki/manylinks/)
 - [Link to Dr. Bongard's GitHub Pyrosim Repository](https://github.com/jbongard/pyrosim.git)
