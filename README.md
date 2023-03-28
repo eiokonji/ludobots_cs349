@@ -5,7 +5,7 @@ In this section of the course, I explored applying forces, planes and procedural
 
 Here is the final image:
 
-<img href="https://imgur.com/ghsDFSb"><img src="https://i.imgur.com/ghsDFSb.png" title="source: imgur.com" width=80% height=80%/>
+<img src="https://i.imgur.com/ghsDFSb.png" width=80% height=80%/>
 
 ## Resources
 - [Link to Dr. Bongard's Reddit Course](https://www.reddit.com/r/ludobots/wiki/manylinks/)
